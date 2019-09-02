@@ -1,4 +1,4 @@
-# define ZERO_VALUE 1.0 //for debug use (edge mask)
+# define ZERO_VALUE 0.0 //for debug use (edge mask)
 static void load_irreg_a_c(FLOAT * __restrict__ astartpos,FLOAT * __restrict__ ablk,int lda,int mdim,int kdim){//sparse lazy mode
   int acol,arow;FLOAT *aread,*awrite;
   aread=astartpos;awrite=ablk;
