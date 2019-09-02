@@ -344,7 +344,6 @@ gemmblkregccc:
 
     INIT_C_3col
     movq $(65536-96*BlkDimK)*281474976710656,%r10
-    //movq $0xd000000000000000,%r10 //ablk pointer increment table = (0xd000,0x0000,0x0000,0x0000)
     xorq %r12,%r12
 .Louter_gemmblkregccc:
     UPDATECBLK_1col
@@ -390,13 +389,13 @@ gemmblkregccc:
     xorq %r11,%r11
 .Linner_gemmblkregccc_last:
     prefetcht0 192(A0)
-    prefetcht0 96*SIZE(B0)
+    prefetcht0 64*SIZE(B0)
     prefetcht0 (%r9)
     KERNEL_2 0,0
     prefetcht0 256(A0)
     prefetcht0 320(A0)
 #ifdef DOUBLE
-    prefetcht0 104*SIZE(B0)
+    prefetcht0 72*SIZE(B0)
 #endif
     prefetcht0 64(%r9)
     incq %r11
