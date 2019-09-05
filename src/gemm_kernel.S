@@ -6,6 +6,7 @@
 #define AL      %rax //aload pointer
 #define CIP  -8(%rsp)//cstartpos
 //BlkDimK=128;BlkDimN=256;BlkDimM=12 for cgemm,BlkDimM=6 for zgemm.
+//A_PR_BYTE=192;B_PR_ELEM=64
 #ifdef DOUBLE //double precision
  #define VEC_BROAD vbroadcastsd
  #define VEC_FMA231 vfmadd231pd
@@ -111,23 +112,23 @@
 .endm
 
 .macro KERNEL_8
-    prefetcht0 192(A0)
-    prefetcht0 64*SIZE(B0)
+    prefetcht0 A_PR_BYTE(A0)
+    prefetcht0 B_PR_ELEM*SIZE(B0)
     KERNEL_2 0,0
-    prefetcht0 256(A0)
-    prefetcht0 320(A0)
+    prefetcht0 A_PR_BYTE+64(A0)
+    prefetcht0 A_PR_BYTE+128(A0)
 #ifdef DOUBLE
-    prefetcht0 72*SIZE(B0)
+    prefetcht0 (B_PR_ELEM+8)*SIZE(B0)
 #endif
     KERNEL_2 96,8*SIZE
     incq %r11
-    prefetcht0 384(A0)
-    prefetcht0 80*SIZE(B0)
+    prefetcht0 A_PR_BYTE+192(A0)
+    prefetcht0 (B_PR_ELEM+16)*SIZE(B0)
     KERNEL_2 192,16*SIZE
-    prefetcht0 448(A0)
-    prefetcht0 512(A0)
+    prefetcht0 A_PR_BYTE+256(A0)
+    prefetcht0 A_PR_BYTE+320(A0)
 #ifdef DOUBLE
-    prefetcht0 88*SIZE(B0)
+    prefetcht0 (B_PR_ELEM+24)*SIZE(B0)
 #endif
     KERNEL_F 288,24*SIZE,384,32*SIZE
 .endm
@@ -368,8 +369,18 @@ gemmblkregccc:
 
     addq %r9,A0
     prefetcht0 (A0)
+# if A_PR_BYTE > 64
     prefetcht0 64(A0)
+# endif
+# if A_PR_BYTE > 128
     prefetcht0 128(A0)
+# endif
+# if A_PR_BYTE > 192
+    prefetcht0 192(A0)
+# endif
+# if A_PR_BYTE > 256
+    prefetcht0 256(A0)
+# endif
     incq %r12
     STORECBLK_1col
     rorq $16,%r10
@@ -388,14 +399,14 @@ gemmblkregccc:
     addq LDC,CL
     xorq %r11,%r11
 .Linner_gemmblkregccc_last:
-    prefetcht0 192(A0)
-    prefetcht0 64*SIZE(B0)
+    prefetcht0 A_PR_BYTE(A0)
+    prefetcht0 B_PR_ELEM*SIZE(B0)
     prefetcht0 (%r9)
     KERNEL_2 0,0
-    prefetcht0 256(A0)
-    prefetcht0 320(A0)
+    prefetcht0 A_PR_BYTE+64(A0)
+    prefetcht0 A_PR_BYTE+128(A0)
 #ifdef DOUBLE
-    prefetcht0 72*SIZE(B0)
+    prefetcht0 (B_PR_ELEM+8)*SIZE(B0)
 #endif
     prefetcht0 64(%r9)
     incq %r11
@@ -438,7 +449,6 @@ gemmblktailccc:
     INIT_C_3col
     xorq %r12,%r12
     movq $(96*BlkDimK*281474976710656),%r10
-    //movq $0x3000000000000000,%r10
 .Louter_tail:
     UPDATECBLK_1col
     PREFm12 CS
