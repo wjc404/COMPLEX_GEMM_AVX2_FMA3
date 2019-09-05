@@ -105,12 +105,12 @@
    c10=IRREG_VEC_FMINV(a1,b1,c10);c11=IRREG_VEC_FMINV(a2,b1,c11);c12=IRREG_VEC_FMINV(a3,b1,c12);\
 }
 #define KERNELk2 {\
-    _mm_prefetch((char *)(atemp+128/IRREG_SIZE),_MM_HINT_T0);\
-    _mm_prefetch((char *)(btemp+96),_MM_HINT_T0);\
+    _mm_prefetch((char *)(atemp+A_PR_BYTE/IRREG_SIZE),_MM_HINT_T0);\
+    _mm_prefetch((char *)(btemp+B_PR_ELEM),_MM_HINT_T0);\
     KERNELk1\
-    _mm_prefetch((char *)(atemp+96/IRREG_SIZE),_MM_HINT_T0);\
-    _mm_prefetch((char *)(atemp+160/IRREG_SIZE),_MM_HINT_T0);\
-    _mm_prefetch((char *)(btemp+96),_MM_HINT_T0);\
+    _mm_prefetch((char *)(atemp+(A_PR_BYTE-32)/IRREG_SIZE),_MM_HINT_T0);\
+    _mm_prefetch((char *)(atemp+(A_PR_BYTE+32)/IRREG_SIZE),_MM_HINT_T0);\
+    _mm_prefetch((char *)(btemp+B_PR_ELEM),_MM_HINT_T0);\
     KERNELk1\
 }
 static void gemmblkirregkccc(FLOAT * __restrict__ ablk,FLOAT * __restrict__ bblk,FLOAT * __restrict__ cstartpos,int ldc,int kdim){
