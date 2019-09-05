@@ -6,10 +6,10 @@ INCFILE = src/gemm_kernel_irreg.c src/gemm_copy.c
 default: ZGEMM.so CGEMM.so
 
 ZGEMM.so: $(SRCFILE) $(INCFILE)
-	$(CC) -DBlkDimK=128 -DBlkDimN=128 -DDOUBLE $(CCFLAGS) $(SRCFILE) -o $@
+	$(CC) -DBlkDimK=128 -DBlkDimN=128 -DA_PR_BYTE=192 -DB_PR_ELEM=64 -DDOUBLE $(CCFLAGS) $(SRCFILE) -o $@
   
 CGEMM.so: $(SRCFILE) $(INCFILE)
-	$(CC) -DBlkDimK=256 -DBlkDimN=128 $(CCFLAGS) $(SRCFILE) -o $@
+	$(CC) -DBlkDimK=256 -DBlkDimN=128 -DA_PR_BYTE=192 -DB_PR_ELEM=64 $(CCFLAGS) $(SRCFILE) -o $@
 
 clean:
 	rm -f *GEMM.so
