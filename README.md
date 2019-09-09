@@ -1,5 +1,5 @@
 # COMPLEX_GEMM_AVX2_FMA3
-cgemm and zgemm subroutines for large matrices, using avx2 and fma3 instructions, with performance comparable to MKL2018
+Heavily-optimized cgemm and zgemm subroutines for large matrices(dim 3000-30000), using avx2 and fma3 instructions, with performance comparable to MKL2018, able to achieve >95% theoretical performance in serial executions. 
 
 interface: fortran, 32-bit integer
 
