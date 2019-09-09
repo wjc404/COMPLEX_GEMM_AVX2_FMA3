@@ -137,7 +137,7 @@ static void gemmblkirregkccc(FLOAT * __restrict__ ablk,FLOAT * __restrict__ bblk
 }
 static void gemmblkirregnccc(FLOAT * __restrict__ ablk,FLOAT * __restrict__ bblk,FLOAT * __restrict__ cstartpos,int ldc,int ndim){
   register IRREG_VEC_TYPE a1,a2,a3,b1,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12;
-  FLOAT *atemp,*btemp,*ctemp,*cpref,*apref;int ccol,acol;
+  FLOAT *atemp,*btemp,*ctemp,*cpref;int ccol,acol;
   ctemp=cstartpos;btemp=bblk;
   for(ccol=0;ccol<ndim-3;ccol+=4){//loop over cblk-columns, calculate 5 columns of cblk in each iteration.
    cpref=ctemp;
@@ -171,7 +171,7 @@ static void gemmblkirregnccc(FLOAT * __restrict__ ablk,FLOAT * __restrict__ bblk
 }
 static void gemmblkirregccc(FLOAT * __restrict__ ablk,FLOAT * __restrict__ bblk,FLOAT * __restrict__ cstartpos,int ldc,int mdim,int ndim,int kdim){
   register IRREG_VEC_TYPE a1,a2,a3,b1,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12;__m256i ml1,ml2,ml3;
-  FLOAT *atemp,*btemp,*ctemp,*cpref,*apref;int ccol,acol;
+  FLOAT *atemp,*btemp,*ctemp,*cpref;int ccol,acol;
 #ifdef DOUBLE
   ml1=_mm256_setr_epi32(0,-(mdim>0),0,-(mdim>0),0,-(mdim>1),0,-(mdim>1));
   ml2=_mm256_setr_epi32(0,-(mdim>2),0,-(mdim>2),0,-(mdim>3),0,-(mdim>3));
