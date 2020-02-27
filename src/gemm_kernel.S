@@ -47,9 +47,9 @@
     VEC_FMS231 %ymm0,%ymm1,%ymm13
     VEC_FMS231 %ymm0,%ymm2,%ymm14
     VEC_FMS231 %ymm0,%ymm3,%ymm15
-    VEC_PERM %ymm1,%ymm1
-    VEC_PERM %ymm2,%ymm2
-    VEC_PERM %ymm3,%ymm3
+    VEC_PERM \Aoff(A0),%ymm1
+    VEC_PERM \Aoff+32(A0),%ymm2
+    VEC_PERM \Aoff+64(A0),%ymm3
     VEC_BROAD \Boff+4*SIZE(B0),%ymm0
     VEC_FMS231 %ymm0,%ymm1,%ymm4
     VEC_FMS231 %ymm0,%ymm2,%ymm5
@@ -72,7 +72,6 @@
     vmovaps \Aoff(A0),%ymm1
     vmovaps \Aoff+32(A0),%ymm2
     vmovaps \Aoff+64(A0),%ymm3
-    addq $\delta,A0
     VEC_BROAD \Boff(B0),%ymm0
     VEC_FMS231 %ymm0,%ymm1,%ymm4
     VEC_FMS231 %ymm0,%ymm2,%ymm5
@@ -89,9 +88,10 @@
     VEC_FMS231 %ymm0,%ymm1,%ymm13
     VEC_FMS231 %ymm0,%ymm2,%ymm14
     VEC_FMS231 %ymm0,%ymm3,%ymm15
-    VEC_PERM %ymm1,%ymm1
-    VEC_PERM %ymm2,%ymm2
-    VEC_PERM %ymm3,%ymm3
+    VEC_PERM \Aoff(A0),%ymm1
+    VEC_PERM \Aoff+32(A0),%ymm2
+    VEC_PERM \Aoff+64(A0),%ymm3
+    addq $\delta,A0
     VEC_BROAD \Boff+4*SIZE(B0),%ymm0
     VEC_FMS231 %ymm0,%ymm1,%ymm4
     VEC_FMS231 %ymm0,%ymm2,%ymm5
